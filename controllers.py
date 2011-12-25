@@ -12,24 +12,23 @@ class BackupPage(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'text/plain'
         c = EC2Connection(AWS['key'], AWS['secret'], is_secure=SAFE)
 
-        images_created = []
-
         for reservation in c.get_all_instances():
             for instance in reservation.instances:
                 name = "%s-%s" % (datetime.date.today(), instance.id)
 
                 try:
                     image_id = c.create_image(instance.id, name)
-                    images_created.append(image_id)
                     message = "%s backed up on image %s" % (instance.id, image_id)
+
+                    c.create_tags([image_id],
+                                  {'instance': instance.id,
+                                   'created_at': datetime.date.today(),
+                                   'created_by': 'cloudsnap'});
                 except EC2ResponseError:
                     message = "Error: %s not backed up" % instance.id
 
-                self.response.out.write(message)
 
-        c.create_tags(images_created,
-                      {'created_at': datetime.date.today(),
-                       'created_by': 'cloudsnap'});
+                self.response.out.write(message)
 
 
 class CleanupPage(webapp2.RequestHandler):
