@@ -6,13 +6,13 @@ from boto.exception import EC2ResponseError
 from settings import *
 
 
-class IndexPage(webapp2.RequestHandler):
+class IndexHandler(webapp2.RequestHandler):
 
     def get(self):
         return webapp2.redirect("https://github.com/renanivo/cloudsnap")
 
 
-class BackupPage(webapp2.RequestHandler):
+class BackupHandler(webapp2.RequestHandler):
 
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
@@ -36,7 +36,7 @@ class BackupPage(webapp2.RequestHandler):
                 self.response.out.write(message)
 
 
-class CleanupPage(webapp2.RequestHandler):
+class CleanupHandler(webapp2.RequestHandler):
 
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'

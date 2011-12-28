@@ -1,7 +1,8 @@
 import webapp2
 
-from controllers import *
+from handlers import *
 
-app = webapp2.WSGIApplication([('/backup', BackupPage),
-                               ('/cleanup', CleanupPage)],
+app = webapp2.WSGIApplication([('/', IndexHandler),
+                               ('/backup', BackupHandler),
+                               ('/cleanup', CleanupHandler)],
                               debug=True)
