@@ -1,0 +1,10 @@
+cron:
+- description: Daily Backup Job
+  url: /backup
+  schedule: every day 00:00
+  timezone: America/Sao_Paulo
+
+- description: Daily Backup AMIs and Snapshots Cleanning Job
+  url: /cleanup
+  schedule: every day 01:00
+  timezone: America/Sao_Paulo
