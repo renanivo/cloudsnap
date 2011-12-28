@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 import webapp2
 from google.appengine.api import mail
@@ -15,6 +16,7 @@ class Logger:
         subject = ("Cloudsnap Log at %s" % datetime.date.today())
 
         handler.response.out.write(message)
+        logging.debug(message)
         mail.send_mail(sender=LOGGER['sender'], to=LOGGER['to'],
                        subject=subject, body=message)
 
