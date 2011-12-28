@@ -27,11 +27,19 @@ class BackupPage(webapp2.RequestHandler):
                 except EC2ResponseError:
                     message = "Error: %s not backed up" % instance.id
 
-
                 self.response.out.write(message)
 
 
 class CleanupPage(webapp2.RequestHandler):
 
     def get(self):
-        pass
+        self.response.headers['Content-Type'] = 'text/plain'
+        c = EC2Connection(AWS['key'], AWS['secret'], is_secure=SAFE)
+
+        for image in c.get_all_images():
+            if (image.tags.has_key('created_by') and
+                image.tags['created_by'] == 'cloudsnap' and
+                image.tags['created_at'] != str(datetime.date.today())):
+                c.deregister_image(image.id, True)
+                self.response.out.write("image %s deregistered and snapshot %s deleted" %
+                                        (image.id, image.block_device_mapping.current_value.snapshot_id))

@@ -5,5 +5,13 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /.*
+- url: /
   script: cloudsnap.app
+
+- url: /backup
+  script: cloudsnap.app
+  login: admin
+
+- url: /cleanup
+  script: cloudsnap.app
+  login: admin

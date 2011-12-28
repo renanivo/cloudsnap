@@ -83,8 +83,7 @@ try:
 except ImportError:
     import dummy_threading as threading
 
-ON_APP_ENGINE = all(key in os.environ for key in (
-    'USER_IS_ADMIN', 'CURRENT_VERSION_ID', 'APPLICATION_ID'))
+ON_APP_ENGINE = True
 
 PORTS_BY_SECURITY = { True: 443, False: 80 }
 
