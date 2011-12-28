@@ -6,6 +6,12 @@ from boto.exception import EC2ResponseError
 from settings import *
 
 
+class IndexPage(webapp2.RequestHandler):
+
+    def get(self):
+        return webapp2.redirect("https://github.com/renanivo/cloudsnap")
+
+
 class BackupPage(webapp2.RequestHandler):
 
     def get(self):
