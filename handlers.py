@@ -1,10 +1,11 @@
 import datetime
+
 import webapp2
 from boto.ec2.connection import EC2Connection
 from boto.exception import EC2ResponseError
 
+from logger import Logger
 from settings import *
-
 
 class IndexHandler(webapp2.RequestHandler):
 
@@ -33,7 +34,7 @@ class BackupHandler(webapp2.RequestHandler):
                 except EC2ResponseError:
                     message = "Error: %s not backed up" % instance.id
 
-                self.response.out.write(message)
+                Logger.log(self, message)
 
 
 class CleanupHandler(webapp2.RequestHandler):
@@ -47,5 +48,5 @@ class CleanupHandler(webapp2.RequestHandler):
                 image.tags['created_by'] == 'cloudsnap' and
                 image.tags['created_at'] != str(datetime.date.today())):
                 c.deregister_image(image.id, True)
-                self.response.out.write("image %s deregistered and snapshot %s deleted" %
-                                        (image.id, image.block_device_mapping.current_value.snapshot_id))
+                Logger.log(self, "image %s deregistered and snapshot %s deleted" %
+                                  (image.id, image.block_device_mapping.current_value.snapshot_id))
