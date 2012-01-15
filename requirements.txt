@@ -1,0 +1,4 @@
+WebOb==1.2b2
+mox==0.5.3
+webapp2==2.3
+wsgiref==0.1.2
