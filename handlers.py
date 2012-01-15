@@ -6,6 +6,7 @@ from boto.exception import EC2ResponseError
 
 from logger import Logger
 from settings import *
+from shortcuts import get_all_instances
 
 class IndexHandler(webapp2.RequestHandler):
 
@@ -19,22 +20,21 @@ class BackupHandler(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'text/plain'
         c = EC2Connection(AWS['key'], AWS['secret'], is_secure=SAFE)
 
-        for reservation in c.get_all_instances():
-            for instance in reservation.instances:
-                name = "%s-%s" % (datetime.date.today(), instance.id)
+        for instance in get_all_instances(c):
+            name = "%s-%s" % (datetime.date.today(), instance.id)
 
-                try:
-                    image_id = c.create_image(instance.id, name)
-                    message = "%s backed up on image %s" % (instance.id, image_id)
+            try:
+                image_id = c.create_image(instance.id, name)
+                message = "%s backed up on image %s" % (instance.id, image_id)
 
-                    c.create_tags([image_id],
-                                  {'instance': instance.id,
-                                   'created_at': datetime.date.today(),
-                                   'created_by': 'cloudsnap'});
-                except EC2ResponseError:
-                    message = "Error: %s not backed up" % instance.id
+                c.create_tags([image_id],
+                              {'instance': instance.id,
+                               'created_at': datetime.date.today(),
+                               'created_by': 'cloudsnap'});
+            except EC2ResponseError:
+                message = "Error: %s not backed up" % instance.id
 
-                Logger.log(self, message)
+            Logger.log(self, message)
 
 
 class CleanupHandler(webapp2.RequestHandler):
