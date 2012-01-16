@@ -6,12 +6,12 @@ threadsafe: true
 
 handlers:
 - url: /
-  script: cloudsnap.app
+  script: main.app
 
 - url: /backup
-  script: cloudsnap.app
+  script: main.app
   login: admin
 
 - url: /cleanup
-  script: cloudsnap.app
+  script: main.app
   login: admin

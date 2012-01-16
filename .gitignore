@@ -1,4 +1,4 @@
-settings.py
+cloudsnap/settings.py
 *.pyc
 *.swp
 *.swo
