@@ -1,4 +1,8 @@
 cloudsnap/settings.py
+bin/
+include/
+lib/
+local
 *.pyc
 *.swp
 *.swo
