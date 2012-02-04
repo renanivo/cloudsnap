@@ -4,6 +4,7 @@ AWS = {
 }
 
 SAFE = True
+DEBUG = False
 
 # From AppEngine documentation (http://goo.gl/AO8lt):
 # For security purposes, the sender address of a message must be the email
@@ -15,3 +16,9 @@ LOGGER = {
     'sender': 'Cloudsnap Logger<logger@appid.appspotmail.com>',
     'to': 'Your Email<you@yourdomain.com>',
 }
+
+# Template of the generated AMI's
+# {{ today }} the current date in the format yyyy-mm-dd
+# {{ name }} the instance name (falls back to instance_id when not found)
+# {{ instance_id }}
+AMI_NAME_TEMPLATE = "{{ today }}-{{ name }}"
