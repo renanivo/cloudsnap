@@ -6,7 +6,7 @@ from boto.exception import EC2ResponseError
 
 from logger import Logger
 from settings import *
-from shortcuts import get_all_instances
+from shortcuts import get_all_instances, create_instance_backup_name
 
 class IndexHandler(webapp2.RequestHandler):
 
@@ -21,7 +21,7 @@ class BackupHandler(webapp2.RequestHandler):
         c = EC2Connection(AWS['key'], AWS['secret'], is_secure=SAFE)
 
         for instance in get_all_instances(c):
-            name = "%s-%s" % (datetime.date.today(), instance.id)
+            name = create_instance_backup_name(AMI_NAME_TEMPLATE, instance)
 
             try:
                 image_id = c.create_image(instance.id, name)
