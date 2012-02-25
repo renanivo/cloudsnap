@@ -1,5 +1,5 @@
 Jinja2==2.6
 WebOb==1.2b2
-mox==0.5.3
+mock==0.7.2
 webapp2==2.3
 wsgiref==0.1.2

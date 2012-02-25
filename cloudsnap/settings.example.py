@@ -1,9 +1,9 @@
 AWS = {
     'key': '',
     'secret': '',
+    'use_safe_connection': True
 }
 
-SAFE = True
 DEBUG = False
 
 # From AppEngine documentation (http://goo.gl/AO8lt):
