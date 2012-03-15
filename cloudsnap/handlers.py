@@ -18,9 +18,11 @@ class BackupHandler(webapp2.RequestHandler):
 
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
-        c = EC2Connection(AWS['key'], AWS['secret'], is_secure=SAFE)
+        account = EC2Connection(AWS['key'],
+                                AWS['secret'],
+                                is_secure=AWS['use_safe_connection'])
 
-        for instance in get_all_instances(c):
+        for instance in account.get_instances():
             name = create_instance_backup_name(AMI_NAME_TEMPLATE, instance)
 
             try:
