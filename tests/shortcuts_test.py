@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 import datetime
-import mox
+from mock import Mock, patch
 
 from boto.ec2.connection import EC2Connection
 from boto.ec2.instance import Instance, Reservation
@@ -12,42 +12,36 @@ from shortcuts import *
 
 class ShortcutsTest(unittest.TestCase):
 
-    def setUp(self):
-        self.mox = mox.Mox()
-
-    def tearDown(self):
-        self.mox.UnsetStubs()
-
-    def test_create_instance_backup_name_should_return_a_string_rendered_from_template(self):
+    @patch('shortcuts.AMI_NAME_TEMPLATE', "{{ today }}-{{ name }}-{{ instance_id }}")
+    def test_create_AMI_name_should_return_a_string_rendered_from_template(self):
         expected = "%s-%s-%s" % (datetime.date.today(), "name", "id")
 
-        instance = self.mox.CreateMock(Instance)
+        instance = Mock(Instance)
 
         instance.id = "id"
         instance.tags = {
             "Name": "name",
             }
 
-        actual = create_instance_backup_name("{{ today }}-{{ name }}-{{ instance_id }}", instance)
+        actual = create_AMI_name(instance)
         self.assertEqual(expected, actual)
 
-    def test_create_instance_backup_name_should_fallback_to_instance_id_when_template_has_name_and_instance_didnt(self):
+    @patch('shortcuts.AMI_NAME_TEMPLATE', "{{ today }}-{{ name }}")
+    def test_create_AMI_name_should_fallback_to_instance_id_when_template_has_name_and_instance_didnt(self):
         expected = "%s-%s" % (datetime.date.today(), "id")
 
-        instance = self.mox.CreateMock(Instance)
+        instance = Mock(Instance)
         instance.id = "id"
 
-        tags = self.mox.CreateMock(TagSet)
-        tags.has_key("Name").AndReturn(False)
-        instance.tags = tags
+        tags_mock = Mock(TagSet)
+        tags_mock.has_key.return_value = False
+        instance.tags = tags_mock
 
-        self.mox.ReplayAll()
-
-        actual = create_instance_backup_name("{{ today }}-{{ name }}", instance)
-
-        self.mox.VerifyAll()
+        actual = create_AMI_name(instance)
 
         self.assertEqual(expected, actual)
+        self.assertTrue(tags_mock.has_key.called)
+        tags_mock.has_key.assert_called_with("Name")
 
 
 if __name__ == '__main__':
