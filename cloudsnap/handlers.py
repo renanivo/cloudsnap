@@ -6,7 +6,7 @@ from boto.exception import EC2ResponseError
 
 from logger import Logger
 from settings import *
-from shortcuts import get_all_instances, create_instance_backup_name
+from ec2adapters import EC2Account
 
 class IndexHandler(webapp2.RequestHandler):
 
@@ -18,21 +18,12 @@ class BackupHandler(webapp2.RequestHandler):
 
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
-        account = EC2Connection(AWS['key'],
-                                AWS['secret'],
-                                is_secure=AWS['use_safe_connection'])
+        account = EC2Account()
 
         for instance in account.get_instances():
-            name = create_instance_backup_name(AMI_NAME_TEMPLATE, instance)
-
             try:
-                image_id = c.create_image(instance.id, name)
+                image_id = account.create_AMI(instance)
                 message = "%s backed up on image %s" % (instance.id, image_id)
-
-                c.create_tags([image_id],
-                              {'instance': instance.id,
-                               'created_at': datetime.date.today(),
-                               'created_by': 'cloudsnap'});
             except EC2ResponseError:
                 message = "Error: %s not backed up" % instance.id
 

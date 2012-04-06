@@ -2,8 +2,6 @@ import unittest
 import datetime
 from mock import MagicMock, Mock, patch
 
-from boto.ec2.connection import EC2Connection
-from boto.ec2.instance import Instance, Reservation
 from ec2adapters import *
 
 from settings import AWS
