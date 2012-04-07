@@ -1,5 +1,11 @@
 Jinja2==2.6
+NoseGAE==0.2.0
 WebOb==1.2b2
+cov-core==1.6
+coverage==3.5.1
 mock==0.7.2
+nose==1.1.2
+nose-cov==1.4
+nose-machineout==0.3-rc1
 webapp2==2.3
 wsgiref==0.1.2
