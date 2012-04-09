@@ -38,7 +38,7 @@ Development Environment
 To set up the project on your development environment, follow these steps:
 
 - Download the APP Engine SDK
-- Move the SDK folder to /opt/google_appengine (the google_appengine folder may be anywhere. If you place it elsewhere take a look at Makefile and replace the path to run the unit tests)
+- Move the SDK folder to /usr/local/google_appengine (the google_appengine folder may be anywhere. If you place it elsewhere take a look at Makefile and replace the path to run the unit tests)
 - Install virtualenv and virtualenvwrapper:  
 
     > sudo pip install virtualenv  
