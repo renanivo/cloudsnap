@@ -26,7 +26,32 @@ Since cloudsnap is already taken (by me) you will need to replace the applicatio
 
 The cron.yaml is configured according to my needs. Feel free to change the scheduling and timezone according to yours.
 
-Deployment
+Deploying
 ----------
 
 Download [GAE python SDK](http://code.google.com/appengine/downloads.html#Google_App_Engine_SDK_for_Python) and follow [application upload instructions](http://code.google.com/appengine/docs/python/gettingstarted/uploading.html).
+
+
+Development Environment
+-----------------------
+
+To set up the project on your development environment, follow these steps:
+
+- Download the APP Engine SDK
+- Move the SDK folder to /opt/google_appengine (the google_appengine folder may be anywhere. If you place it elsewhere take a look at Makefile and replace the path to run the unit tests)
+- Install virtualenv and virtualenvwrapper:  
+
+    > sudo pip install virtualenv  
+    > sudo pip install virtualenvwrapper  
+
+- Clone the project:  
+
+    > git clone https://github.com/renanivo/cloudsnap.git  
+
+- Create a new virtualenv on the project folder:  
+
+    > virtualenv --no-site-packages cloudsnap  
+
+- Go to the project folder and execute:  
+
+    > make setup  
