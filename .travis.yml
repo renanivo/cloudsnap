@@ -4,6 +4,9 @@ python:
   - 2.7
 install: make setup
 before_script:
+  - pip install virtualenvwrapper
+  - export WORKON_HOME=$HOME/dev
+  - source /usr/local/bin/virtualenvwrapper.sh
   - add2virtualenv cloudsnap
   - wget http://googleappengine.googlecode.com/files/google_appengine_1.6.4.zip
   - unzip google_appengine_1.6.4.zip
