@@ -1,0 +1,9 @@
+script: nosetests --with-gae --without-sandbox --gae-lib-root google_appengine --gae-application cloudsnap
+language: python
+python:
+  - 2.7
+install: make setup
+before_script:
+  - add2virtualenv cloudsnap
+  - wget http://googleappengine.googlecode.com/files/google_appengine_1.6.4.zip
+  - unzip google_appengine_1.6.4.zip
