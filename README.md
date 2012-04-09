@@ -41,17 +41,18 @@ To set up the project on your development environment, follow these steps:
 - Move the SDK folder to /usr/local/google_appengine (the google_appengine folder may be anywhere. If you place it elsewhere take a look at Makefile and replace the path to run the unit tests)
 - Install virtualenv and virtualenvwrapper:  
 
-    > sudo pip install virtualenv  
-    > sudo pip install virtualenvwrapper  
+    sudo pip install virtualenv  
+    sudo pip install virtualenvwrapper  
 
 - Clone the project:  
 
-    > git clone https://github.com/renanivo/cloudsnap.git  
+    git clone https://github.com/renanivo/cloudsnap.git  
 
 - Create a new virtualenv on the project folder:  
 
-    > virtualenv --no-site-packages cloudsnap  
+    virtualenv --no-site-packages cloudsnap  
 
 - Go to the project folder and execute:  
 
-    > make setup  
+    add2virtualenv cloudsnap  
+    make setup  
