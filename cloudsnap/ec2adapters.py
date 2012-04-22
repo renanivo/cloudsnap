@@ -42,7 +42,7 @@ class EC2Account():
 
         return instances
 
-    def create_AMI(self, instance):
+    def backup_instance(self, instance):
         image_id = self._connection.create_AMI(instance.id,
                                                self._create_AMI_name(instance))
         self._connection.create_tags([image_id],
