@@ -1,10 +1,11 @@
 import datetime
 
+import jinja2
+
 from boto.ec2.connection import EC2Connection
 from boto.ec2.instance import Instance, Reservation
 
-from settings import AWS
-from shortcuts import create_AMI_name
+from settings import AWS, AMI_NAME_TEMPLATE
 
 
 class EC2Account():
@@ -20,6 +21,18 @@ class EC2Account():
         else:
             self._connection = connection
 
+    def _create_AMI_name(self, instance):
+        env = jinja2.Environment()
+        template = env.from_string(AMI_NAME_TEMPLATE)
+
+        name = instance.tags["Name"] if instance.tags.has_key("Name") else instance.id
+
+        return template.render({
+            "today": datetime.date.today(),
+            "name": name,
+            "instance_id": instance.id,
+            })
+
     def get_instances(self):
         instances = []
 
@@ -31,7 +44,7 @@ class EC2Account():
 
     def create_AMI(self, instance):
         image_id = self._connection.create_AMI(instance.id,
-                                               create_AMI_name(instance))
+                                               self._create_AMI_name(instance))
         self._connection.create_tags([image_id],
                                      {'instance': instance.id,
                                       'created_at': datetime.date.today(),

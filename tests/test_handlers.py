@@ -10,7 +10,7 @@ import main
 class BackupHandlerTest(unittest.TestCase):
 
     @patch('handlers.EC2Account')
-    def test_get_should_call_create_AMI(self, account_mock):
+    def test_should_create_AMI(self, account_mock):
         instance_mock = Mock(spec='boto.ec2.instance.Instance')
         instance_mock.id = 0
 
