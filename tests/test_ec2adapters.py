@@ -50,7 +50,7 @@ class EC2AccountTest(unittest.TestCase):
     @patch('ec2adapters.AMI_NAME_TEMPLATE', '{{ today }}-{{ name }}')
     @patch('ec2adapters.EC2Connection')
     def test_should_backup_an_instance_and_get_the_AMI_id(self, connection_mock):
-        connection_mock.create_AMI.return_value = 99
+        connection_mock.create_image.return_value = 99
         instance_mock = self._get_instance_mock(11, "instance_name")
 
         account = EC2Account(connection_mock)
@@ -65,13 +65,13 @@ class EC2AccountTest(unittest.TestCase):
         account = EC2Account(connection_mock)
 
         account.backup_instance(instance_mock)
-        connection_mock.create_AMI.assert_called_once_with(11, "%s-%s" % (datetime.date.today(),
+        connection_mock.create_image.assert_called_once_with(11, "%s-%s" % (datetime.date.today(),
                                                                           "instance_name"))
 
     @patch('ec2adapters.AMI_NAME_TEMPLATE', '{{ today }}-{{ name }}')
     @patch('ec2adapters.EC2Connection')
     def test_should_backup_an_instance_with_time_and_instance_id_on_tags(self, connection_mock):
-        connection_mock.create_AMI.return_value = 99
+        connection_mock.create_image.return_value = 99
         instance_mock = self._get_instance_mock(11, "instance_name")
 
         account = EC2Account(connection_mock)

@@ -22,7 +22,7 @@ class BackupHandler(webapp2.RequestHandler):
 
         for instance in account.get_instances():
             try:
-                image_id = account.create_AMI(instance)
+                image_id = account.backup_instance(instance)
                 message = "%s backed up on image %s" % (instance.id, image_id)
             except EC2ResponseError:
                 message = "Error: %s not backed up" % instance.id
