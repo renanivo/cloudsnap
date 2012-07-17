@@ -2,6 +2,7 @@ cloudsnap/settings.py
 bin/
 include/
 lib/
+man/
 local
 *.pyc
 *.swp
