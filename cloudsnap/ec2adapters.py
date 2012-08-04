@@ -10,8 +10,6 @@ from settings import AWS, AMI_NAME_TEMPLATE
 
 class EC2Account():
 
-    _connection = None
-
     def __init__(self, connection=None):
 
         if connection is None:
