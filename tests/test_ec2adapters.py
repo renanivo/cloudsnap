@@ -2,24 +2,23 @@ import unittest
 import datetime
 from mock import MagicMock, Mock, patch
 
-from ec2adapters import *
+from ec2adapters import EC2Account
 
 from settings import AWS
 
 
 class EC2AccountTest(unittest.TestCase):
 
-
-    def _get_instance_mock(self, id, name):
+    def _get_instance_mock(self, id, tags={}):
         instance_mock = MagicMock(spec='boto.ec2.instance.Instance')
         instance_mock.id = id
-        instance_mock.tags = {'Name': name}
+        instance_mock.tags = tags
 
         return instance_mock
 
     @patch('ec2adapters.EC2Connection')
     def test_should_create_a_connection_when_not_given(self, connection_mock):
-        a = EC2Account()
+        EC2Account()
         connection_mock.assert_called_once_with(AWS['key'],
                                                 AWS['secret'],
                                                 is_secure=AWS['use_safe_connection'])
@@ -51,7 +50,7 @@ class EC2AccountTest(unittest.TestCase):
     @patch('ec2adapters.EC2Connection')
     def test_should_backup_an_instance_and_get_the_AMI_id(self, connection_mock):
         connection_mock.create_image.return_value = 99
-        instance_mock = self._get_instance_mock(11, "instance_name")
+        instance_mock = self._get_instance_mock(11, {"Name": "instance_name"})
 
         account = EC2Account(connection_mock)
 
@@ -60,19 +59,19 @@ class EC2AccountTest(unittest.TestCase):
     @patch('ec2adapters.AMI_NAME_TEMPLATE', '{{ today }}-{{ name }}')
     @patch('ec2adapters.EC2Connection')
     def test_should_use_boto_to_backup_an_instance(self, connection_mock):
-        instance_mock = self._get_instance_mock(11, "instance_name")
+        instance_mock = self._get_instance_mock(11, {"Name": "instance_name"})
 
         account = EC2Account(connection_mock)
 
         account.backup_instance(instance_mock)
         connection_mock.create_image.assert_called_once_with(11, "%s-%s" % (datetime.date.today(),
-                                                                          "instance_name"))
+                                                                            "instance_name"))
 
     @patch('ec2adapters.AMI_NAME_TEMPLATE', '{{ today }}-{{ name }}')
     @patch('ec2adapters.EC2Connection')
     def test_should_backup_an_instance_with_time_and_instance_id_on_tags(self, connection_mock):
         connection_mock.create_image.return_value = 99
-        instance_mock = self._get_instance_mock(11, "instance_name")
+        instance_mock = self._get_instance_mock(11, {"Name": "instance_name"})
 
         account = EC2Account(connection_mock)
 
@@ -80,6 +79,18 @@ class EC2AccountTest(unittest.TestCase):
         connection_mock.create_tags.assert_called_once_with([99], {"instance": 11,
                                                                    "created_at": datetime.date.today(),
                                                                    "created_by": "cloudsnap"})
+
+    @patch('boto.ec2.EC2Connection')
+    def test_should_get_a_list_of_backups(self, connection_mock):
+        instance_mock = self._get_instance_mock(11, {"created_by": "instance_name"})
+        connection_mock.get_all_images.return_value = [instance_mock]
+
+        account = EC2Account(connection_mock)
+        backups = account.get_backups()
+
+        self.assertEqual(1, len(backups))
+        self.assertEqual(instance_mock, backups[0])
+        connection_mock.get_all_images.assert_called_once()
 
 
 if __name__ == '__main__':

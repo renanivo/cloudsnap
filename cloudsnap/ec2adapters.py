@@ -48,3 +48,7 @@ class EC2Account():
                                       'created_at': datetime.date.today(),
                                       'created_by': 'cloudsnap'});
         return image_id
+
+
+    def get_backups(self):
+        return self._connection.get_all_images()
