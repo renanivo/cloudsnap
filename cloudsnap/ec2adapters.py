@@ -1,9 +1,7 @@
 import datetime
 
 import jinja2
-
 from boto.ec2.connection import EC2Connection
-from boto.ec2.instance import Instance, Reservation
 
 from settings import AWS, AMI_NAME_TEMPLATE
 
@@ -11,7 +9,6 @@ from settings import AWS, AMI_NAME_TEMPLATE
 class EC2Account():
 
     def __init__(self, connection=None):
-
         if connection is None:
             self._connection = EC2Connection(AWS['key'],
                                              AWS['secret'],
@@ -32,6 +29,7 @@ class EC2Account():
             })
 
     def get_instances(self):
+        """Return a list of all EC2 instances of the account"""
         instances = []
 
         for reservation in self._connection.get_all_instances():
@@ -41,6 +39,7 @@ class EC2Account():
         return instances
 
     def backup_instance(self, instance):
+        """Create a backup (AMI) of a given instance"""
         image_id = self._connection.create_image(instance.id,
                                                self._create_AMI_name(instance))
         self._connection.create_tags([image_id],
@@ -50,6 +49,7 @@ class EC2Account():
         return image_id
 
     def get_backups(self):
+        """Return a list of all backups (AMIs) created by it"""
         backups = []
 
         for image in self._connection.get_all_images():
@@ -61,4 +61,5 @@ class EC2Account():
         return backups
 
     def delete_backup(self, image):
+        """Delete a backup (AMI)"""
         self._connection.deregister_image(image.id, True)
