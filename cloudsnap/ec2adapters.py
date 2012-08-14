@@ -59,3 +59,6 @@ class EC2Account():
                 backups.append(image)
 
         return backups
+
+    def delete_backup(self, image):
+        self._connection.deregister_image(image.id, True)

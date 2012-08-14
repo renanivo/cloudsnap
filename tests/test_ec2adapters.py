@@ -110,6 +110,17 @@ class EC2AccountTest(unittest.TestCase):
         connection_mock.assert_called_once()
         self.assertEqual(0, len(backups))
 
+    @patch('boto.ec2.image.Image')
+    @patch('boto.ec2.EC2Connection')
+    def test_should_delete_a_backup(self, connection_mock, image_mock):
+        account = EC2Account(connection_mock)
+        image_mock.id = 10
+
+        account.delete_backup(image_mock)
+
+        connection_mock.deregister_image.assert_called_once_with(image_mock.id,
+                                                                 True)
+
 
 if __name__ == '__main__':
     unittest.main()
