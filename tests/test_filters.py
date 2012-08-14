@@ -9,10 +9,10 @@ class FiltersTest(unittest.TestCase):
     @patch("boto.ec2.image.Image")
     @patch("boto.ec2.image.Image")
     @patch("boto.ec2.image.Image")
-    def test_should_filter_a_backup_list_by_the_tags_it_contains(self,
-                                                                 backup_mock1,
-                                                                 backup_mock2,
-                                                                 backup_mock3):
+    def test_should_filter_a_backup_list_by_equal_values(self,
+                                                         backup_mock1,
+                                                         backup_mock2,
+                                                         backup_mock3):
         backup_mock1.tags = {"foo": "bar"}
         backup_mock2.tags = {"foo": "foo"}
         backup_mock3.tags = {"foo": "baz"}
