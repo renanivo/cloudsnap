@@ -90,7 +90,7 @@ class EC2AccountTest(unittest.TestCase):
         backups = account.get_backups()
 
         self.assertEqual(1, len(backups))
-        self.assertEqual(image_mock, backups[0])
+        self.assertIn(image_mock, backups)
         connection_mock.get_all_images.assert_called_once()
 
     @patch('boto.ec2.EC2Connection')
