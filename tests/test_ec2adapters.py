@@ -80,17 +80,35 @@ class EC2AccountTest(unittest.TestCase):
                                                                    "created_at": datetime.date.today(),
                                                                    "created_by": "cloudsnap"})
 
+    @patch('boto.ec2.image.Image')
     @patch('boto.ec2.EC2Connection')
-    def test_should_get_a_list_of_backups(self, connection_mock):
-        instance_mock = self._get_instance_mock(11, {"created_by": "instance_name"})
-        connection_mock.get_all_images.return_value = [instance_mock]
+    def test_should_get_a_list_of_backups(self, connection_mock, image_mock):
+        image_mock.tags = {"created_by": "cloudsnap"}
+        connection_mock.get_all_images.return_value = [image_mock]
 
         account = EC2Account(connection_mock)
         backups = account.get_backups()
 
         self.assertEqual(1, len(backups))
-        self.assertEqual(instance_mock, backups[0])
+        self.assertEqual(image_mock, backups[0])
         connection_mock.get_all_images.assert_called_once()
+
+    @patch('boto.ec2.EC2Connection')
+    def test_should_not_get_AMIs_not_created_by_it(self, connection_mock):
+        image_mock1 = MagicMock("boto.ec2.image.Image")
+        image_mock2 = MagicMock("boto.ec2.image.Image")
+
+        image_mock1.tags = {}
+        image_mock2.tags = {"created_by": ""}
+
+        connection_mock.get_all_images.return_value = [image_mock1,
+                                                       image_mock2]
+
+        account = EC2Account(connection_mock)
+        backups = account.get_backups()
+
+        connection_mock.assert_called_once()
+        self.assertEqual(0, len(backups))
 
 
 if __name__ == '__main__':

@@ -46,9 +46,16 @@ class EC2Account():
         self._connection.create_tags([image_id],
                                      {'instance': instance.id,
                                       'created_at': datetime.date.today(),
-                                      'created_by': 'cloudsnap'});
+                                      'created_by': 'cloudsnap'})
         return image_id
 
-
     def get_backups(self):
-        return self._connection.get_all_images()
+        backups = []
+
+        for image in self._connection.get_all_images():
+            if ("created_by" in image.tags and
+                image.tags["created_by"] == "cloudsnap"):
+                print image
+                backups.append(image)
+
+        return backups
