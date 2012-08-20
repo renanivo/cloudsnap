@@ -1,4 +1,4 @@
-CloudSnap [![Build Status](https://secure.travis-ci.org/renanivo/cloudsnap.png)](http://travis-ci.org/renanivo/cloudsnap)
+CloudSnap [![Build Status](https://secure.travis-ci.org/renanivo/cloudsnap.png?branch=master)](http://travis-ci.org/renanivo/cloudsnap)
 =========
 
 A python 2.7 Google App Engine (GAE) script to create images (AMIs) from all of your Amazon EC2 instances.
