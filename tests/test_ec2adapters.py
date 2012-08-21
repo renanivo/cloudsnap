@@ -93,11 +93,11 @@ class EC2AccountTest(unittest.TestCase):
         self.assertIn(image_mock, backups)
         connection_mock.get_all_images.assert_called_once()
 
+    @patch('boto.ec2.image.Image')
+    @patch('boto.ec2.image.Image')
     @patch('boto.ec2.EC2Connection')
-    def test_should_not_get_AMIs_not_created_by_it(self, connection_mock):
-        image_mock1 = MagicMock("boto.ec2.image.Image")
-        image_mock2 = MagicMock("boto.ec2.image.Image")
-
+    def test_should_not_get_AMIs_not_created_by_it(self, connection_mock,
+                                                   image_mock1, image_mock2):
         image_mock1.tags = {}
         image_mock2.tags = {"created_by": ""}
 
@@ -109,6 +109,30 @@ class EC2AccountTest(unittest.TestCase):
 
         connection_mock.assert_called_once()
         self.assertEqual(0, len(backups))
+
+    @patch('boto.ec2.image.Image')
+    @patch('boto.ec2.image.Image')
+    @patch('boto.ec2.EC2Connection')
+    def test_should_filter_backups_by_tags_in_a_given_parameter(self,
+                                                                connection_mock,
+                                                                image_mock1,
+                                                                image_mock2):
+        today = str(datetime.date.today())
+        not_today = "1990-01-01"
+
+        image_mock1.tags = {"created_at": not_today,
+                            "created_by": "cloudsnap"}
+        image_mock2.tags = {"created_at": today,
+                            "created_by": "cloudsnap"}
+
+        connection_mock.get_all_images.return_value = [image_mock1,
+                                                       image_mock2]
+        account = EC2Account(connection_mock)
+        backups = account.get_backups(filters={"not_equal":
+                                               {"created_at": today},
+                                               })
+        self.assertEqual(1, len(backups))
+        self.assertEqual(not_today, backups[0].tags["created_at"])
 
     @patch('boto.ec2.image.Image')
     @patch('boto.ec2.EC2Connection')
