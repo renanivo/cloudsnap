@@ -1,13 +1,12 @@
 import datetime
 
 import webapp2
-from boto.ec2.connection import EC2Connection
 from boto.exception import EC2ResponseError
 
 from logger import Logger
-from settings import *
 from ec2adapters import EC2Account
 from filters import filter_backups_by_tags
+
 
 class IndexHandler(webapp2.RequestHandler):
 
