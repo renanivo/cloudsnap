@@ -33,8 +33,8 @@ class BackupHandlerTest(unittest.TestCase):
                                                       account_mock,
                                                       current_backup,
                                                       old_backup):
-        today = datetime.date.today()
-        yesterday = datetime.date.today() - datetime.timedelta(days=1)
+        today = str(datetime.date.today())
+        yesterday = str(datetime.date.today() - datetime.timedelta(days=1))
 
         current_backup.id = 1
         current_backup.tags = {
@@ -47,17 +47,18 @@ class BackupHandlerTest(unittest.TestCase):
             "created_by": "cloudsnap",
             "created_at": yesterday
             }
-        current_backup.block_device_mapping.current_value.snapshot_id = 20
+        old_backup.block_device_mapping.current_value.snapshot_id = 20
 
         account_mock.get_backups.return_value = [current_backup, old_backup]
+        account_mock.return_value = account_mock  # mock constructor
 
         request = webapp2.Request.blank('/cleanup')
         response = request.get_response(main.app)
 
-        self.assertEqual("image 1 deregistered and snapshot 10 deleted",
+        self.assertEqual("image 2 deregistered and snapshot 20 deleted",
                          response.body)
         account_mock.get_backups.assert_called_once()
-        account_mock.delete_backup.assert_called_once_with(old_backup.id)
+        account_mock.delete_backup.assert_called_once_with(old_backup)
 
 
 if __name__ == '__main__':

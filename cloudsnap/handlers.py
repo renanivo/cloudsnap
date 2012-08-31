@@ -7,6 +7,7 @@ from boto.exception import EC2ResponseError
 from logger import Logger
 from settings import *
 from ec2adapters import EC2Account
+from filters import filter_backups_by_tags
 
 class IndexHandler(webapp2.RequestHandler):
 
@@ -34,12 +35,21 @@ class CleanupHandler(webapp2.RequestHandler):
 
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
-        c = EC2Connection(AWS['key'], AWS['secret'], is_secure=SAFE)
+        account = EC2Account()
 
-        for image in c.get_all_images():
-            if (image.tags.has_key('created_by') and
-                image.tags['created_by'] == 'cloudsnap' and
-                image.tags['created_at'] != str(datetime.date.today())):
-                c.deregister_image(image.id, True)
-                Logger.log(self, "image %s deregistered and snapshot %s deleted" %
-                                  (image.id, image.block_device_mapping.current_value.snapshot_id))
+        today = str(datetime.date.today())
+        backups = account.get_backups()
+        old_backups = filter_backups_by_tags(backups,
+                                             tags_equal={"created_by":
+                                                         "cloudsnap"},
+                                             tags_not_equal={"created_at":
+                                                             today}
+                                             )
+        print old_backups
+
+        for backup in old_backups:
+            account.delete_backup(backup)
+            Logger.log(self,
+                       "image %s deregistered and snapshot %s deleted" %
+                       (backup.id,
+                        backup.block_device_mapping.current_value.snapshot_id))
