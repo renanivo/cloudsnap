@@ -10,7 +10,7 @@ import main
 
 class BackupHandlerTest(unittest.TestCase):
 
-    @patch('handlers.EC2Account')
+    @patch('handlers.backup.EC2Account')
     def test_should_create_a_backup(self, account_mock):
         instance_mock = Mock(spec='boto.ec2.instance.Instance')
         instance_mock.id = 0
@@ -28,7 +28,7 @@ class BackupHandlerTest(unittest.TestCase):
 
     @patch('boto.ec2.image.Image')
     @patch('boto.ec2.image.Image')
-    @patch('handlers.EC2Account')
+    @patch('handlers.cleanup.EC2Account')
     def test_should_delete_backups_older_than_one_day(self,
                                                       account_mock,
                                                       current_backup,
