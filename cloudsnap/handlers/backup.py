@@ -6,7 +6,7 @@ from logger import Logger
 
 class BackupHandler(webapp2.RequestHandler):
 
-    def get(self):
+    def post(self):
         self.response.headers['Content-Type'] = 'text/plain'
         account = EC2Account()
 

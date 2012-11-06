@@ -20,6 +20,7 @@ class BackupHandlerTest(unittest.TestCase):
         account_mock.return_value = account_mock
 
         request = webapp2.Request.blank('/backup')
+        request.method = "POST"
         response = request.get_response(main.app)
 
         self.assertEqual('0 backed up on image 99', response.body)
