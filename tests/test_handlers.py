@@ -29,7 +29,7 @@ class BackupHandlerTest(unittest.TestCase):
 
     @patch('boto.ec2.image.Image')
     @patch('boto.ec2.image.Image')
-    @patch('handlers.cleanup.EC2Account')
+    @patch('handlers.backup.EC2Account')
     def test_should_delete_backups_older_than_one_day(self,
                                                       account_mock,
                                                       current_backup,
@@ -53,7 +53,8 @@ class BackupHandlerTest(unittest.TestCase):
         account_mock.get_backups.return_value = [current_backup, old_backup]
         account_mock.return_value = account_mock  # mock constructor
 
-        request = webapp2.Request.blank('/cleanup')
+        request = webapp2.Request.blank('/backup')
+        request.method = "DELETE"
         response = request.get_response(main.app)
 
         self.assertEqual("image 2 deregistered and snapshot 20 deleted",
