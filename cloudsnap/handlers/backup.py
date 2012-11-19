@@ -1,14 +1,13 @@
 import datetime
 
-import webapp2
-
 from ec2adapters import EC2Account
 from boto.exception import EC2ResponseError
 from filters import filter_backups_by_tags
 from logger import Logger
+from proxy_method import ProxyMethodRequestHandler
 
 
-class BackupHandler(webapp2.RequestHandler):
+class BackupHandler(ProxyMethodRequestHandler):
 
     def post(self):
         self.response.headers['Content-Type'] = 'text/plain'
