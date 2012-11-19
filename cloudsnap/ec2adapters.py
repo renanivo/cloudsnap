@@ -1,6 +1,5 @@
 import datetime
 
-import jinja2
 from boto.ec2.connection import EC2Connection
 
 from settings import AWS, AMI_NAME_TEMPLATE
@@ -20,19 +19,15 @@ class EC2Account():
             self._connection = connection
 
     def _create_AMI_name(self, instance):
-        env = jinja2.Environment()
-        template = env.from_string(AMI_NAME_TEMPLATE)
-
         if "Name" in instance.tags:
             name = instance.tags["Name"]
         else:
-            instance.id
+            name = instance.id
 
-        return template.render({
-            "today": datetime.date.today(),
-            "name": name,
-            "instance_id": instance.id,
-            })
+        return AMI_NAME_TEMPLATE % {"today": datetime.date.today(),
+                                   "name": name,
+                                   "instance_id": instance.id,
+                                   }
 
     @log_method
     def get_instances(self):

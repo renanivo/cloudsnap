@@ -45,7 +45,7 @@ class EC2AccountTest(unittest.TestCase):
         self.assertIn(instance_mock1, instances)
         self.assertIn(instance_mock2, instances)
 
-    @patch('ec2adapters.AMI_NAME_TEMPLATE', '{{ today }}-{{ name }}')
+    @patch('ec2adapters.AMI_NAME_TEMPLATE', '%(today)s-%(name)s')
     @patch('ec2adapters.EC2Connection')
     def test_should_backup_an_instance_and_get_the_AMI_id(self, connection_mock):
         connection_mock.create_image.return_value = 99
@@ -55,7 +55,7 @@ class EC2AccountTest(unittest.TestCase):
 
         self.assertEqual(99, account.backup_instance(instance_mock))
 
-    @patch('ec2adapters.AMI_NAME_TEMPLATE', '{{ today }}-{{ name }}')
+    @patch('ec2adapters.AMI_NAME_TEMPLATE', '%(today)s-%(name)s')
     @patch('ec2adapters.EC2Connection')
     def test_should_use_boto_to_backup_an_instance(self, connection_mock):
         instance_mock = self._get_instance_mock(11, {"Name": "instance_name"})
@@ -66,7 +66,7 @@ class EC2AccountTest(unittest.TestCase):
         connection_mock.create_image.assert_called_once_with(11, "%s-%s" % (datetime.date.today(),
                                                                             "instance_name"))
 
-    @patch('ec2adapters.AMI_NAME_TEMPLATE', '{{ today }}-{{ name }}')
+    @patch('ec2adapters.AMI_NAME_TEMPLATE', '%(today)s-%(name)s')
     @patch('ec2adapters.EC2Connection')
     def test_should_backup_an_instance_with_time_and_instance_id_on_tags(self, connection_mock):
         connection_mock.create_image.return_value = 99
