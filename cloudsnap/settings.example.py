@@ -19,7 +19,7 @@ LOGGER = {
 }
 
 # Template of the generated AMI's
-# {{ today }} the current date in the format yyyy-mm-dd
-# {{ name }} the instance name (falls back to instance_id when not found)
-# {{ instance_id }}
-AMI_NAME_TEMPLATE = "{{ today }}-{{ name }}"
+# %(today) the current date in the format yyyy-mm-dd
+# %(name) the instance name (falls back to instance_id when not found)
+# %(instance_id)
+AMI_NAME_TEMPLATE = "%(today)-%(name)"
