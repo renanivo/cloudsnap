@@ -1,7 +1,8 @@
 AWS = {
     'key': '',
     'secret': '',
-    'use_safe_connection': True
+    'use_safe_connection': True,
+    'validate_certs': True,
 }
 
 DEBUG = False

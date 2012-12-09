@@ -19,9 +19,11 @@ class EC2AccountTest(unittest.TestCase):
     @patch('ec2adapters.EC2Connection')
     def test_should_create_a_connection_when_not_given(self, connection_mock):
         EC2Account()
-        connection_mock.assert_called_once_with(AWS['key'],
-                                                AWS['secret'],
-                                                is_secure=AWS['use_safe_connection'])
+        connection_mock.assert_called_once_with(
+                            AWS['key'],
+                            AWS['secret'],
+                            is_secure=AWS['use_safe_connection'],
+                            validate_certs=AWS['validate_certs'])
 
     @patch('ec2adapters.EC2Connection')
     def test_should_get_an_instance_list(self, connection_mock):

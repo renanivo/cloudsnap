@@ -13,7 +13,8 @@ class EC2Account():
             self._connection = EC2Connection(
                     AWS['key'],
                     AWS['secret'],
-                    is_secure=AWS['use_safe_connection']
+                    is_secure=AWS['use_safe_connection'],
+                    validate_certs=AWS['validate_certs']
                     )
         else:
             self._connection = connection
