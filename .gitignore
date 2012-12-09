@@ -1,9 +1,10 @@
-cloudsnap/settings.py
-bin/
-include/
-lib/
-man/
-local
+/cloudsnap/settings.py
+/cloudsnap/boto*
+/bin/
+/include/
+/lib/
+/man/
+/local
 *.pyc
 *.swp
 *.swo

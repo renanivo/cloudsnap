@@ -1,6 +1,7 @@
 GAE_ROOT=/usr/local/google_appengine
 setup:
-	@pip install -r requirements.txt
+	@pip install -r requirements_dev.txt
+	@pip install --install-option="--install-purelib=$(shell pwd)/cloudsnap" -r requirements.txt
 	@cp cloudsnap/settings.example.py cloudsnap/settings.py
 	@if [ ! -d "$(GAE_ROOT)" ]; then echo "Warning: App Engine SDK not found."; fi;
 test:
