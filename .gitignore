@@ -5,6 +5,8 @@
 /lib/
 /man/
 /local
+/cover/
+.coverage
 *.pyc
 *.swp
 *.swo
