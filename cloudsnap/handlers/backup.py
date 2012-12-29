@@ -34,8 +34,6 @@ class BackupHandler(ProxyMethodRequestHandler):
                                              tags_not_equal={"created_at":
                                                              today}
                                              )
-        print old_backups
-
         for backup in old_backups:
             account.delete_backup(backup)
             Logger.log(self,
