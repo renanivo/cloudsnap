@@ -4,7 +4,6 @@ import jinja2
 from boto.ec2.connection import EC2Connection
 
 from settings import AWS, AMI_NAME_TEMPLATE
-from filters import filter_backups_by_tags
 from plus import log_method
 
 
@@ -63,9 +62,9 @@ class EC2Account():
     @log_method
     def get_backups(self):
         """Return a list of all backups (AMIs) created by it"""
-        backups = self._connection.get_all_images()
-
-        return filter_backups_by_tags(backups, {"created_by": "cloudsnap"})
+        return self._connection.get_all_images(
+                filters={"tag:created_by": u"cloudsnap"}
+                )
 
     @log_method
     def delete_backup(self, image):

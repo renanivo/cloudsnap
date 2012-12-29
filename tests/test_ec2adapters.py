@@ -25,7 +25,6 @@ class EC2AccountTest(unittest.TestCase):
 
     @patch('ec2adapters.EC2Connection')
     def test_should_get_an_instance_list(self, connection_mock):
-
         reservation_mock1 = Mock(spec='boto.ec2.instance.Reservation')
         reservation_mock2 = Mock(spec='boto.ec2.instance.Reservation')
 
@@ -98,17 +97,12 @@ class EC2AccountTest(unittest.TestCase):
     @patch('boto.ec2.EC2Connection')
     def test_should_not_get_AMIs_not_created_by_it(self, connection_mock,
                                                    image_mock1, image_mock2):
-        image_mock1.tags = {}
-        image_mock2.tags = {"created_by": ""}
-
-        connection_mock.get_all_images.return_value = [image_mock1,
-                                                       image_mock2]
 
         account = EC2Account(connection_mock)
-        backups = account.get_backups()
+        account.get_backups()
 
-        connection_mock.assert_called_once()
-        self.assertEqual(0, len(backups))
+        connection_mock.get_all_images.assert_called_once_with(
+                filters={"tag:created_by": "cloudsnap"})
 
     @patch('boto.ec2.image.Image')
     @patch('boto.ec2.EC2Connection')
