@@ -1,12 +1,12 @@
-script: nosetests --with-gae --without-sandbox --gae-lib-root google_appengine --gae-application cloudsnap
+script: nosetests --with-spec --spec-color --with-gae --without-sandbox --gae-lib-root google_appengine --gae-application cloudsnap
 language: python
 python:
   - 2.7
 install: make setup &> /dev/null
 before_script:
-  - pip install virtualenvwrapper &> /dev/null
+  - pip install virtualenvwrapper pinocchio &> /dev/null
   - export WORKON_HOME=$HOME/dev
-  - source /home/vagrant/virtualenv/python2.7/bin/virtualenvwrapper.sh
+  - source /home/vagrant/virtualenv/python2.7/bin/virtualenvwrapper.sh &> /dev/null
   - add2virtualenv cloudsnap
   - wget http://googleappengine.googlecode.com/files/google_appengine_1.6.4.zip &> /dev/null
   - unzip google_appengine_1.6.4.zip &> /dev/null
