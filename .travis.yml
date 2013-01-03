@@ -2,11 +2,11 @@ script: nosetests --with-gae --without-sandbox --gae-lib-root google_appengine -
 language: python
 python:
   - 2.7
-install: make setup
+install: make setup &> /dev/null
 before_script:
-  - pip install virtualenvwrapper
+  - pip install virtualenvwrapper &> /dev/null
   - export WORKON_HOME=$HOME/dev
   - source /home/vagrant/virtualenv/python2.7/bin/virtualenvwrapper.sh
   - add2virtualenv cloudsnap
-  - wget http://googleappengine.googlecode.com/files/google_appengine_1.6.4.zip
-  - unzip google_appengine_1.6.4.zip
+  - wget http://googleappengine.googlecode.com/files/google_appengine_1.6.4.zip &> /dev/null
+  - unzip google_appengine_1.6.4.zip &> /dev/null
