@@ -8,5 +8,3 @@ before_script:
   - export WORKON_HOME=$HOME/dev
   - source /home/vagrant/virtualenv/python2.7/bin/virtualenvwrapper.sh &> /dev/null
   - add2virtualenv cloudsnap
-  - wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.6.zip &> /dev/null
-  - unzip google_appengine_1.9.6.zip &> /dev/null
