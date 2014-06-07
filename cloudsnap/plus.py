@@ -28,8 +28,7 @@ class LogFunctionDecorator(object):
         return {u"name": self.func.__name__,
                 u"elapsed": self.elapsed_time,
                 u"now": datetime.datetime.now(),
-                u"params": "args: %s and kwargs: %s" % (params, kw_params),
-                }
+                u"params": "args: %s and kwargs: %s" % (params, kw_params)}
 
 
 class LogMethodDecorator(LogFunctionDecorator):

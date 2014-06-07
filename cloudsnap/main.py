@@ -1,10 +1,10 @@
 import webapp2
 
-from handlers import *
+from handlers import IndexHandler, BackupHandler
 from settings import DEBUG
 
 
 app = webapp2.WSGIApplication([
-                               ('/', IndexHandler),
-                               ('/backup', BackupHandler),
-                               ], debug=DEBUG)
+    ('/', IndexHandler),
+    ('/backup', BackupHandler),
+    ], debug=DEBUG)

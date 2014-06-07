@@ -1,4 +1,10 @@
-def filter_backups_by_tags(backup_list, tags_equal={}, tags_not_equal={}):
+def filter_backups_by_tags(backup_list, tags_equal=None, tags_not_equal=None):
+    if tags_equal is None:
+        tags_equal = {}
+
+    if tags_not_equal is None:
+        tags_not_equal = {}
+
     def equals_filter(item):
         for k, v in tags_equal.items():
             return k in item.tags and item.tags[k] == v
