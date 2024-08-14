@@ -1,5 +1,5 @@
 NoseGAE==0.2.0
-WebOb==1.2b2
+WebOb==1.8.8
 mock==0.7.2
 nose==1.1.2
 webapp2==2.3
